@@ -1,0 +1,28 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+    <h1>Login</h1>  
+    <form method="POST" action="/login" novalidate class="login needs-validation">
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" value="<%= typeof email !== 'undefined'? email:'' %>" autocomplete="off" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" autocomplete="off" required>
+        </div>
+        <div class="user-type">
+            <input type="radio" id="user" name="userType" value="users" required>
+            <label for="user">User</label>
+            <input type="radio" id="manager" name="userType" value="managers" required>
+            <label for="manager">Manager</label>
+        </div>
+        <% if(wrongEmail){ %>
+            <div class="mb-2 logsignerr">Email not registered!</div>
+        <% } %>
+        <% if(wrongPswd){ %>
+            <div class="mb-2 logsignerr">Wrong Password!</div>
+        <% } %>
+        <button class="btn btn-dark">Login</button>
+    </form>
+    <div class="logtosign">New User? <a href="/signup">Signup</a></div>
+</body>

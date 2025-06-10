@@ -1,0 +1,93 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body id="showOne">
+    <h2><%= thisListing.title %></h2>
+    <div class="details">
+        <div class="img-cont">
+            <img src="<%= thisListing.image %>" width="500px">
+        </div>
+        <div>
+            <ul>
+                <li>Description: <%= thisListing.description %></li>
+                <li>Price: &#8377;<%= thisListing.price.toLocaleString("en-IN") %> per day</li>
+                <li>Location: <%= thisListing.location %></li>
+                <li>Country: <%= thisListing.country %></li>
+            </ul>
+            <h4>Amenities</h4>
+            <div class="amenities-container">
+                <% let isPrem = false; %>
+                <% for(idv of amenities){ %>
+                    <% if(idv.premium === 1){ %>
+                        <span class="amenity-badge premium"><%= idv.amenity %><sup>*</sup></span>
+                        <% isPrem = true %>
+                    <% } else { %>
+                        <span class="amenity-badge"><%= idv.amenity %></span>
+                    <% } %>
+                <% } %>
+            </div>
+            <% if(isPrem){ %>
+                <div class="mt-1">( <sup>*</sup>premium amenities, extra charges applied)</div>
+            <% } %>
+            <% if(user?.type !== "managers"){ %>
+            <div class="mt-3">
+                <form method="GET" action="/booking">
+                    <input type="hidden" name="listingId" value="<%= thisListing.id %>">
+                    <input type="hidden" name="destination" value="<%= thisListing.title %>">
+                    <input type="hidden" name="price" value="<%= thisListing.price %>">
+                    <button class="btn btn-primary book">Book</button>
+                </form>
+            </div>
+            <div>
+                <form method="POST" action="/review" id="review-form">
+                <input type="hidden" name="listingId" value="<%= thisListing.id %>">
+                <div class="mb-3" id="rating-field" style="display: none;">
+                    <label class="form-label">Rating</label>
+                    <input type="number" name="rating" max="5" min="1" required autocomplete="off" class="form-control" placeholder="Give rating 1-5">
+                </div>
+                <div class="mb-3" id="comment-field" style="display: none;">
+                    <label class="form-label">Comment</label>
+                    <textarea name="comment" rows="4" cols="50" required class="form-control"></textarea>
+                    </div>
+                <button type="button" class="btn btn-danger" id="review-button">Add a review</button>
+                </form>
+            </div>
+            <% } %>
+            <% if(user?.type === "managers"){ %>
+            <form method="GET" action="/listings/<%= thisListing.id %>/edit"><button class="btn btn-dark">Edit</button></form>
+            <form method="POST" action="/listings/<%= thisListing.id %>?_method=DELETE"><button class="btn btn-dark delete">Delete</button></form>
+            <% } %>
+            <div id="manager-details">
+            <h4 class="mt-3">Manager Details</h4>
+            <div>Name: <%= thisListing.manager_name %></div>
+            <div>Email: <%= thisListing.manager_email %></div>
+            <div>Phone: <%= thisListing.manager_phone %></div>
+            </div>
+            <div id="reviews">
+                <h4 class="mt-3">Reviews</h4>
+                <% if(reviews.length === 0){ %>
+                    <div>No reviews yet</div>
+                <% } else { %>
+                <div class="rev-outer-flex">
+                    <% for(idv of reviews){ %>
+                        <div class="rev-card">
+                            <div class="rev-inner-flex">
+                            <div><b><%= idv.user_name %></b></div>
+                            <div><b><%= idv.rating %></b> <i class="fa-solid fa-star"></i></div>
+                            </div>
+                            <div class="rev-inner-flex mt-1">
+                                <div><%= idv.comment %></div>
+                                <% if(idv.user_email === user.email){ %>
+                                <div><form method="POST" action="/reviews/<%= idv.review_id %>?_method=DELETE">
+                                <input type="hidden" name="listingId" value="<%= thisListing.id %>">
+                                <button style="border: none;"><i class="fa-solid fa-trash"></i></button>
+                                </form></div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <script src="/js/review.js"></script>
+</body>

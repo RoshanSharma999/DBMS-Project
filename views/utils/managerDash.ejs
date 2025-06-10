@@ -1,0 +1,25 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+    <h1>Dashboard</h1>
+    <h2>Hello <%= user.name %> <span>(as manager)</span></h2>
+    <div>Email: <%= user.email %></div>
+    <form method="GET" action="/logout"><button class="btn btn-dark delete mt-3 mb-4">Logout</button></form>
+    <div class="manager-booking">
+        <h2>Bookings under your listings</h2>
+        <% if(bookings.length === 0){ %>
+        <div>No bookings yet</div>
+        <% } else { %>
+            <div id="manager-bookings">
+            <% for(idv of bookings){ %>
+                <div class="booking-card">
+                    <h3><%= idv.listing_title %></h3>
+                    <p><strong>User:</strong> <%= idv.user_name %> (<%= idv.user_email %>)</p>
+                    <p><strong>From:</strong> <%= idv.from_date %></p>
+                    <p><strong>To:</strong> <%= idv.to_date %></p>
+                    <p><strong>Number of Persons:</strong> <%= idv.num_persons %></p>
+                </div>
+            <% } %>
+            </div>
+        <% } %>
+    </div>
+</body>

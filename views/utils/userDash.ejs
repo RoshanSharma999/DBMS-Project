@@ -1,0 +1,28 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+    <h1>Dashboard</h1>
+    <h2>Hello <%= user.name %></h2>
+    <div>Email: <%= user.email %></div>
+    <form method="GET" action="/logout"><button class="btn btn-dark delete mt-3 mb-4">Logout</button></form>
+    <div class="bookings">
+        <h2>Your Bookings</h2>
+        <div class="dash-grid">
+        <% if(bookings.length === 0){ %>
+            <div>No bookings yet</div>
+        <% } else { %>
+            <% for(idv of bookings){ %>
+                    <div class="dashboard-card">
+                        <div><img src="<%= idv.image %>" class="dash-img"></div>
+                        <div>
+                            <h4><%= idv.title %></h4>
+                            <div>No of persons: <b><%= idv.num_persons %></b></div>
+                            <div>From <b><%= idv.from_date %></b> to <b><%= idv.to_date %></b></div>
+                            <div>Total price: <b>&#8377;<%= idv.total_price %></b></div>
+                            <form method="POST" action="/delBooking/<%= idv.booking_id %>?_method=DELETE"><button class="btn btn-dark mt-3">Cancel</button></form>
+                        </div>
+                    </div>
+            <% } %>
+        <% } %>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,30 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+    <h1>Signup</h1>  
+    <form method="POST" action="/signup" novalidate class="signup needs-validation">
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" autocomplete="off" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" autocomplete="off" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Create Password</label>
+            <input type="password" name="password" class="form-control" autocomplete="off" required>
+        </div>
+        <div class="user-type">
+            <input type="radio" id="user" name="userType" value="users" required>
+            <label for="user">User</label>
+            <input type="radio" id="manager" name="userType" value="managers" required>
+            <label for="manager">Manager</label>
+        </div>
+        <% if(wrongEmail){ %>
+            <div class="mb-2 logsignerr">Email already registered!</div>
+        <% } %>
+        <button class="btn btn-dark">Signup</button>
+    </form>
+    <div class="signtolog">Already have an account?<a href="/login">Login</a></div>
+    <script src="/js/phone.js"></script>
+</body>
